@@ -26,10 +26,42 @@
   .hist{display:flex;gap:6px;align-items:flex-end;height:90px}
   .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.7rem;color:var(--muted)}
   .stick{width:100%;background:var(--muted);border-radius:4px 4px 0 0;min-height:2px}
+
+  header{
+    display: flex;
+    justify-content: space-between;
+  }
+  h2{
+    text-decoration: underline;
+  }
 </style>
 </head>
 <body>
+<header> 
 <h1>☕ Kafijas žurnāls</h1>
+<h2 onclick="document.getElementById('info-screen').style.display='block';">info</h2>
+</header>
+
+
+<div style="display:none; " id="info-screen">
+  <span onclick="document.getElementById('info-screen').style.display='none'; background:red;" id="close-info-btn" style="font-weight: bold; background:red;padding:5px;border-radius: 3px; ">X</span>
+
+<h4>Cik daudz ieteicams dzert kafiju?
+Vispārīgais ieteikums pieaugušajiem: līdz 400 mg kofeīna dienā — tas ir aptuveni 3–4 tasītes (250 ml) filterkafijas.
+
+Daži svarīgi nosacījumi:
+
+Grūtniecēm ieteicams nepārsniegt 200 mg dienā (~1–2 tasītes).
+Bērniem un pusaudžiem kafija nav ieteicama vai jāierobežo ļoti stingri.
+Kofeīna daudzums atšķiras: espresso (~60–80 mg/shot), instant kafija (~60 mg/tase), filterkafija (~95–160 mg/tase).
+Labāk izvairīties no kafijas 6–8 stundas pirms miega, jo kofeīns var traucēt miegu.
+Ja tev ir sirds ritma traucējumi, augsts asinsspiediens, trauksme vai grūtības ar kuņģi, labāk konsultēties ar ārstu par individuāli piemērotu daudzumu.</h4>
+
+
+
+
+</div>
+
 
 <div class="card">
   <div><span id="dot" class="dot"></span><span id="status">Droši</span></div>
