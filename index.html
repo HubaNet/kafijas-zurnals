@@ -7,37 +7,7 @@
 <meta name="theme-color" content="#000000">
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 <title>Kafijas žurnāls</title>
-<style>
-  :root{--bg:#1a1512;--card:#241d18;--fg:#f0e6dc;--muted:#a89684;
-        --green:#4caf50;--yellow:#e0b341;--red:#e05252}
-  *{box-sizing:border-box}
-  body{margin:0;padding:16px;background:var(--bg);color:var(--fg);
-       font:16px/1.5 system-ui,sans-serif;max-width:520px;margin-inline:auto}
-  h1{font-size:1.4rem;margin:.2em 0 1em}
-  .card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:14px}
-  .count{font-size:2.6rem;font-weight:700;text-align:center}
-  .cups{text-align:center;min-height:1.6em;font-size:1.4rem;letter-spacing:2px}
-  .bar{height:10px;background:#3a2f27;border-radius:6px;overflow:hidden;margin:12px 0}
-  .fill{height:100%;width:0;background:var(--green);transition:width .25s,background .25s}
-  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
-  button{width:100%;padding:14px;margin-top:8px;border:0;border-radius:10px;
-         font-size:1rem;font-weight:600;color:#1a1512;background:var(--muted);
-         cursor:pointer;-webkit-tap-highlight-color:transparent}
-  #add{background:var(--green);color:#08130a}
-  #undo{background:var(--yellow)}
-  #clear{background:var(--red);color:#fff}
-  .hist{display:flex;gap:6px;align-items:flex-end;height:90px}
-  .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.7rem;color:var(--muted)}
-  .stick{width:100%;background:var(--muted);border-radius:4px 4px 0 0;min-height:2px}
-
-  header{
-    display: flex;
-    justify-content: space-between;
-  }
-  h2{
-    text-decoration: underline;
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header> 
@@ -81,48 +51,7 @@ Ja tev ir sirds ritma traucējumi, augsts asinsspiediens, trauksme vai grūtība
   <div class="hist" id="hist"></div>
 </div>
 
-<script>
-const LIMIT = 4, KEY = 'kafija-v1';
-const $ = id => document.getElementById(id);
-const today = () => new Date().toISOString().slice(0,10);
-
-function load(){
-  try{ const d = JSON.parse(localStorage.getItem(KEY)); return d && typeof d==='object' ? d : {}; }
-  catch{ return {}; }
-}
-let data = load();
-const save = () => localStorage.setItem(KEY, JSON.stringify(data));
-const n = () => data[today()] || 0;
-
-function render(){
-  const c = n();
-  $('count').textContent = c;
-  $('cups').textContent  = '☕'.repeat(Math.min(c, 12)) + (c > 12 ? ` +${c-12}` : '');
-  $('fill').style.width  = Math.min(c / LIMIT * 100, 100) + '%';
-
-  const [col, txt] = c < LIMIT ? ['--green','Droši']
-                   : c === LIMIT ? ['--yellow','Robeža sasniegta']
-                   : ['--red', `Virs robežas (+${c-LIMIT})`];
-  $('fill').style.background = getComputedStyle(document.documentElement).getPropertyValue(col);
-  $('dot').style.background  = getComputedStyle(document.documentElement).getPropertyValue(col);
-  $('status').textContent    = txt;
-
-  const days = [...Array(7)].map((_,i)=>{
-    const d = new Date(); d.setDate(d.getDate() - (6-i));
-    return d.toISOString().slice(0,10);
-  });
-  const max = Math.max(LIMIT, ...days.map(d=>data[d]||0));
-  $('hist').innerHTML = days.map(d=>{
-    const v = data[d]||0;
-    return `<div class="col"><div class="stick" style="height:${v/max*70}px;background:${v>LIMIT?'var(--red)':v===LIMIT?'var(--yellow)':'var(--green)'}"></div>${d.slice(8)}.${d.slice(5,7)}</div>`;
-  }).join('');
-}
-
-$('add').onclick  = () => { data[today()] = n() + 1; save(); render(); };
-$('undo').onclick = () => { if(n()>0){ data[today()] = n()-1; save(); render(); } };
-$('clear').onclick= () => { if(confirm('Dzēst šodienas ierakstu?')){ delete data[today()]; save(); render(); } };
-
-render();
+<script src="./script.js">
 </script>
 </body>
 </html>
